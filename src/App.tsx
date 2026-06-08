@@ -2,56 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Phone, ShieldCheck, CheckCircle2, X, PhoneCall, Shield } from 'lucide-react';
 
-const formatPhone = (val: string) => {
-  const cleaned = val.replace(/\D/g, '');
-  const match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
-  if (!match) return val;
-  if (!match[2]) return match[1];
-  if (!match[3]) return `(${match[1]}) ${match[2]}`;
-  return `(${match[1]}) ${match[2]}-${match[3]}`;
-};
-
 export default function App() {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    phone: '',
-    email: '',
-    dob: '',
-    zipCode: '',
-    householdSize: '1',
-    income: '',
-    tcpaAgreed: false,
-  });
-
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
-
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatPhone(e.target.value);
-    setFormData({ ...formData, phone: formatted });
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type } = e.target;
-    if (type === 'checkbox') {
-      const checked = (e.target as HTMLInputElement).checked;
-      setFormData({ ...formData, [name]: checked });
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.tcpaAgreed) {
-      alert('Please agree to the consent terms to proceed.');
-      return;
-    }
-    // Simulate API submission
-    setIsSubmitted(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   // Prevent scrolling when modal is open
   useEffect(() => {
@@ -69,7 +21,7 @@ export default function App() {
       <div className="bg-primary text-white py-2 px-6 shadow-sm relative z-10 text-[12px] font-semibold tracking-[0.05em] uppercase text-center">
         <div className="max-w-4xl mx-auto flex items-center justify-center space-x-2">
           <ShieldCheck className="w-4 h-4 flex-shrink-0" />
-          <span>You will speak directly with a licensed, top-rated insurance partner — no call centers.</span>
+          <span>You will speak directly with a licensed, top-rated insurance partner.</span>
         </div>
       </div>
 
@@ -84,147 +36,40 @@ export default function App() {
         </div>
       </header>
 
-      <main className="flex-grow w-full max-w-2xl mx-auto px-4 py-8 sm:py-12">
-        <AnimatePresence mode="wait">
-          {!isSubmitted ? (
-            <motion.div
-              key="form"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4 }}
-              className="bg-white rounded-[12px] shadow-card border border-border-card overflow-hidden"
-            >
-              <div className="p-6 sm:p-8 border-b border-border-card bg-white">
-                <h1 className="text-2xl sm:text-3xl font-serif text-primary font-bold mb-2">Under 65 Health Insurance Quote</h1>
-                <p className="text-[14px] text-text-partner">Fill out the fast form below to connect with a licensed partner and get your customized quote.</p>
-              </div>
-
-              <form onSubmit={handleSubmit} className="p-6 sm:px-8 sm:pb-8 sm:pt-6 space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* First Name */}
-                  <div className="flex flex-col gap-[6px]">
-                    <label htmlFor="firstName" className="text-[11px] font-bold uppercase text-text-label">First Name</label>
-                    <input required type="text" id="firstName" name="firstName" value={formData.firstName} onChange={handleChange} className="w-full p-[10px] rounded-[6px] border border-border-input bg-bg-input text-[14px] focus:ring-1 focus:ring-primary focus:border-primary transition-colors outline-none" placeholder="Jane" />
-                  </div>
-                  {/* Last Name */}
-                  <div className="flex flex-col gap-[6px]">
-                    <label htmlFor="lastName" className="text-[11px] font-bold uppercase text-text-label">Last Name</label>
-                    <input required type="text" id="lastName" name="lastName" value={formData.lastName} onChange={handleChange} className="w-full p-[10px] rounded-[6px] border border-border-input bg-bg-input text-[14px] focus:ring-1 focus:ring-primary focus:border-primary transition-colors outline-none" placeholder="Doe" />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Phone */}
-                  <div className="flex flex-col gap-[6px]">
-                    <label htmlFor="phone" className="text-[11px] font-bold uppercase text-text-label">Phone Number</label>
-                    <input required type="tel" id="phone" name="phone" value={formData.phone} onChange={handlePhoneChange} maxLength={14} className="w-full p-[10px] rounded-[6px] border border-border-input bg-bg-input text-[14px] focus:ring-1 focus:ring-primary focus:border-primary transition-colors outline-none" placeholder="(555) 000-0000" />
-                  </div>
-                  {/* Email */}
-                  <div className="flex flex-col gap-[6px]">
-                    <label htmlFor="email" className="text-[11px] font-bold uppercase text-text-label">Email Address</label>
-                    <input required type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="w-full p-[10px] rounded-[6px] border border-border-input bg-bg-input text-[14px] focus:ring-1 focus:ring-primary focus:border-primary transition-colors outline-none" placeholder="jane@example.com" />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Date of Birth */}
-                  <div className="flex flex-col gap-[6px]">
-                    <label htmlFor="dob" className="text-[11px] font-bold uppercase text-text-label">Date of Birth</label>
-                    <input required type="date" id="dob" name="dob" value={formData.dob} onChange={handleChange} className="w-full p-[10px] rounded-[6px] border border-border-input bg-bg-input text-[14px] focus:ring-1 focus:ring-primary focus:border-primary transition-colors outline-none" />
-                  </div>
-                  {/* Zip Code */}
-                  <div className="flex flex-col gap-[6px]">
-                    <label htmlFor="zipCode" className="text-[11px] font-bold uppercase text-text-label">Zip Code</label>
-                    <input required type="text" id="zipCode" name="zipCode" value={formData.zipCode} onChange={handleChange} maxLength={5} className="w-full p-[10px] rounded-[6px] border border-border-input bg-bg-input text-[14px] focus:ring-1 focus:ring-primary focus:border-primary transition-colors outline-none" placeholder="12345" />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Household Size */}
-                  <div className="flex flex-col gap-[6px]">
-                    <label htmlFor="householdSize" className="text-[11px] font-bold uppercase text-text-label">Household Size</label>
-                    <select required id="householdSize" name="householdSize" value={formData.householdSize} onChange={handleChange} className="w-full p-[10px] rounded-[6px] border border-border-input bg-bg-input text-[14px] focus:ring-1 focus:ring-primary focus:border-primary transition-colors outline-none">
-                      <option value="1">1 Person</option>
-                      <option value="2">2 People</option>
-                      <option value="3">3 People</option>
-                      <option value="4">4 People</option>
-                      <option value="5+">5+ People</option>
-                    </select>
-                  </div>
-                  {/* Expected Income */}
-                  <div className="flex flex-col gap-[6px]">
-                    <label htmlFor="income" className="text-[11px] font-bold uppercase text-text-label">Expected Annual Income</label>
-                    <select required id="income" name="income" value={formData.income} onChange={handleChange} className="w-full p-[10px] rounded-[6px] border border-border-input bg-bg-input text-[14px] focus:ring-1 focus:ring-primary focus:border-primary transition-colors outline-none">
-                      <option value="" disabled>Select Income Range</option>
-                      <option value="Under $20k">Under $20,000</option>
-                      <option value="$20k - $30k">$20,000 - $30,000</option>
-                      <option value="$30k - $40k">$30,000 - $40,000</option>
-                      <option value="$40k - $50k">$40,000 - $50,000</option>
-                      <option value="Over $50k">Over $50,000</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* TCPA Checkbox */}
-                <div className="pt-4 mt-2">
-                  <label className="flex items-start gap-[10px] cursor-pointer group text-[10px] leading-[1.4] text-text-label">
-                    <div className="flex-shrink-0 mt-[2px]">
-                      <input 
-                        type="checkbox" 
-                        name="tcpaAgreed" 
-                        required
-                        checked={formData.tcpaAgreed} 
-                        onChange={handleChange} 
-                        className="w-4 h-4 rounded border-border-input text-primary focus:ring-primary outline-none cursor-pointer"
-                      />
-                    </div>
-                    <div>
-                      By checking this box and clicking the button below, I provide my express written consent to be contacted by vctors and its <b className="text-primary font-bold">licensed insurance partners</b> via automated phone calls, pre-recorded messages, and text messages at the phone number provided above, even if my number is on a Do Not Call registry. I understand that consent is not a condition to purchase any goods or services. I also agree to the <button type="button" onClick={() => setShowPrivacyPolicy(true)} className="text-primary underline cursor-pointer">Privacy Policy</button> and Terms of Service.
-                    </div>
-                  </label>
-                </div>
-
-                <button type="submit" className="w-full flex items-center justify-center gap-[10px] bg-primary text-white border-none py-4 px-4 rounded-[8px] font-bold text-[16px] sm:text-[18px] mt-4 cursor-pointer hover:bg-primary-hover transition-colors shadow-cta hover:-translate-y-0.5 active:translate-y-0">
-                  <PhoneCall className="w-5 h-5" />
-                  <span>Call a Licensed Agent Now</span>
-                </button>
-              </form>
-            </motion.div>
-          ) : (
-            /* Success State */
-            <motion.div
-              key="success"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.5, type: 'spring' }}
-              className="bg-white rounded-[12px] shadow-card border border-border-card overflow-hidden p-8 sm:p-12 text-center"
-            >
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-bg-partner rounded-full mb-6">
-                <CheckCircle2 className="w-10 h-10 text-primary" />
-              </div>
-              <h2 className="text-3xl font-serif font-bold text-primary mb-4">Request Received!</h2>
-              <p className="text-lg text-text-partner mb-8 max-w-md mx-auto">
-                Thank you, {formData.firstName}. Your information has been securely received by our system.
+      <main className="flex-grow w-full max-w-2xl mx-auto px-4 py-8 sm:py-16 flex flex-col items-center">
+        <motion.div
+           initial={{ opacity: 0, y: 20 }}
+           animate={{ opacity: 1, y: 0 }}
+           transition={{ duration: 0.4 }}
+           className="bg-white rounded-[12px] shadow-card border border-border-card overflow-hidden w-full"
+        >
+          <div className="p-6 sm:p-10 text-center">
+            <h1 className="text-3xl sm:text-4xl font-serif text-primary font-bold mb-4 leading-tight">
+              Working 26-64? Get $150/Mo Health Plans 📞
+            </h1>
+            <h2 className="text-[16px] sm:text-lg text-text-label font-semibold mb-8 uppercase tracking-wide">
+              Strict qualifying rules apply. Check eligibility instantly.
+            </h2>
+            
+            <div className="space-y-4 text-text-partner text-[15px] sm:text-[16px] leading-relaxed mb-8 bg-bg-partner p-6 rounded-[8px] border-l-4 border-l-primary text-left">
+              <p>
+                🇺🇸 Working Americans are finally getting a break on healthcare. If you are aged 26–64, employed making over $30k/year, and NOT on Medicaid/Medicare, you could lock in a private comprehensive plan starting as low as <strong>$150/mo</strong>.
               </p>
-              
-              <div className="bg-bg-partner border-l-4 border-l-primary rounded-r-[12px] rounded-l-[4px] p-6 mb-8 text-left max-w-md mx-auto">
-                <div className="flex items-start space-x-3">
-                  <ShieldCheck className="w-6 h-6 text-primary flex-shrink-0 mt-0.5" />
-                  <div>
-                    <h3 className="font-semibold text-primary mb-1">Speak with a Partner Now</h3>
-                    <p className="text-[14px] text-text-partner">Skip the wait. Connect instantly with a licensed insurance expert—no call centers, just real advice.</p>
-                  </div>
-                </div>
-              </div>
+              <p>
+                Plans take effect within 30 days. Click <strong>'Call Now'</strong> to speak with a licensed agent in under 20 minutes to verify your rate.
+              </p>
+            </div>
+            
+            <a href="tel:18005550199" className="w-full flex items-center justify-center gap-[10px] bg-primary text-white border-none py-4 px-4 rounded-[8px] font-bold text-[18px] sm:text-[20px] shadow-cta hover:-translate-y-0.5 active:translate-y-0 transition-transform hover:bg-primary-hover no-underline">
+              <PhoneCall className="w-6 h-6" />
+              <span>Call Now</span>
+            </a>
 
-              <a href="tel:18005550199" className="inline-flex items-center justify-center space-x-2 bg-primary hover:bg-primary-hover text-white font-bold text-[16px] py-4 px-8 rounded-[8px] shadow-cta transition-transform hover:scale-105 w-full sm:w-auto">
-                <PhoneCall className="w-5 h-5" />
-                <span>Call (800) 555-0199 Now</span>
-              </a>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            <div className="mt-8 pt-6 border-t border-border-card text-[10px] leading-[1.5] text-text-label text-left">
+              By dialing the number above, I provide my express written consent to be contacted by vctors and its <b className="text-primary font-bold">licensed insurance partners</b> via automated phone calls, pre-recorded messages, and text messages at the phone number I provide during the call, even if my number is on a state or national Do Not Call registry. I understand that consent is not a condition to purchase any goods or services. I also agree to the <button type="button" onClick={() => setShowPrivacyPolicy(true)} className="text-primary underline cursor-pointer hover:text-primary-hover bg-transparent border-none p-0 inline">Privacy Policy</button> and Terms of Service.
+            </div>
+          </div>
+        </motion.div>
       </main>
 
       <footer className="py-10 px-4 mt-auto border-t border-border-card bg-bg-main">
@@ -292,15 +137,15 @@ export default function App() {
                 </section>
                 <section>
                   <h3 className="font-semibold text-primary text-base mb-2">2. TCPA Consent and Contact</h3>
-                  <p>By submitting our web form, you are providing your express written consent under the Telephone Consumer Protection Act (TCPA) to be contacted by vctors and our network of licensed agents. This contact may include automated dialing systems, artificial/pre-recorded voices, and SMS text messages to the phone number you provided, even if it is on a state or national Do Not Call list. Consent is not required as a condition of purchasing any goods or services.</p>
+                  <p>By connecting via phone, you are providing your express written consent under the Telephone Consumer Protection Act (TCPA) to be contacted by vctors and our network of licensed agents. This contact may include automated dialing systems, artificial/pre-recorded voices, and SMS text messages to the phone number you call from, even if it is on a state or national Do Not Call list. Consent is not required as a condition of purchasing any goods or services.</p>
                 </section>
                 <section>
                   <h3 className="font-semibold text-primary text-base mb-2">3. Data Collection and Usage</h3>
-                  <p>We collect personal information such as your name, phone number, email address, zip code, date of birth, and basic health and eligibility information solely for the purpose of connecting you with appropriate insurance partners. We may use digital tracking technologies (such as cookies) to monitor website performance and improve our services.</p>
+                  <p>We may collect personal information such as your phone number, and basic health and eligibility information that you provide over the phone solely for the purpose of connecting you with appropriate insurance partners. We may use digital tracking technologies (such as cookies) to monitor website performance and improve our services.</p>
                 </section>
                 <section>
                   <h3 className="font-semibold text-primary text-base mb-2">4. Sharing Your Information</h3>
-                  <p>To fulfill your request for a quote, we transmit the information you submit on this site to our partnered licensed insurance providers. These third parties will use your data to determine eligibility and provide customized quotes. They will have their own privacy practices and policies once they receive your information.</p>
+                  <p>To fulfill your request for a quote, we may securely route your call and basic information to our partnered licensed insurance providers. These third parties will use your data to determine eligibility and provide customized quotes. They will have their own privacy practices and policies once they receive your call.</p>
                 </section>
                 <section>
                   <h3 className="font-semibold text-primary text-base mb-2">5. Your Rights</h3>
