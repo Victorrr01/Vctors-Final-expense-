@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Phone, ShieldCheck, CheckCircle2, X, PhoneCall, Shield } from 'lucide-react';
 
-const STATES = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'];
-
 const formatPhone = (val: string) => {
   const cleaned = val.replace(/\D/g, '');
   const match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
@@ -18,11 +16,11 @@ export default function App() {
     firstName: '',
     lastName: '',
     phone: '',
+    email: '',
     dob: '',
-    state: '',
-    coverageFor: 'Self',
-    gender: '',
-    tobaccoUse: 'No',
+    zipCode: '',
+    householdSize: '1',
+    income: '',
     tcpaAgreed: false,
   });
 
@@ -98,7 +96,7 @@ export default function App() {
               className="bg-white rounded-[12px] shadow-card border border-border-card overflow-hidden"
             >
               <div className="p-6 sm:p-8 border-b border-border-card bg-white">
-                <h1 className="text-2xl sm:text-3xl font-serif text-primary font-bold mb-2">Final Expense Insurance Quote</h1>
+                <h1 className="text-2xl sm:text-3xl font-serif text-primary font-bold mb-2">Under 65 Health Insurance Quote</h1>
                 <p className="text-[14px] text-text-partner">Fill out the fast form below to connect with a licensed partner and get your customized quote.</p>
               </div>
 
@@ -122,49 +120,48 @@ export default function App() {
                     <label htmlFor="phone" className="text-[11px] font-bold uppercase text-text-label">Phone Number</label>
                     <input required type="tel" id="phone" name="phone" value={formData.phone} onChange={handlePhoneChange} maxLength={14} className="w-full p-[10px] rounded-[6px] border border-border-input bg-bg-input text-[14px] focus:ring-1 focus:ring-primary focus:border-primary transition-colors outline-none" placeholder="(555) 000-0000" />
                   </div>
+                  {/* Email */}
+                  <div className="flex flex-col gap-[6px]">
+                    <label htmlFor="email" className="text-[11px] font-bold uppercase text-text-label">Email Address</label>
+                    <input required type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="w-full p-[10px] rounded-[6px] border border-border-input bg-bg-input text-[14px] focus:ring-1 focus:ring-primary focus:border-primary transition-colors outline-none" placeholder="jane@example.com" />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Date of Birth */}
                   <div className="flex flex-col gap-[6px]">
                     <label htmlFor="dob" className="text-[11px] font-bold uppercase text-text-label">Date of Birth</label>
                     <input required type="date" id="dob" name="dob" value={formData.dob} onChange={handleChange} className="w-full p-[10px] rounded-[6px] border border-border-input bg-bg-input text-[14px] focus:ring-1 focus:ring-primary focus:border-primary transition-colors outline-none" />
                   </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* State */}
+                  {/* Zip Code */}
                   <div className="flex flex-col gap-[6px]">
-                    <label htmlFor="state" className="text-[11px] font-bold uppercase text-text-label">State</label>
-                    <select required id="state" name="state" value={formData.state} onChange={handleChange} className="w-full p-[10px] rounded-[6px] border border-border-input bg-bg-input text-[14px] focus:ring-1 focus:ring-primary focus:border-primary transition-colors outline-none">
-                      <option value="" disabled>Select State</option>
-                      {STATES.map(s => <option key={s} value={s}>{s}</option>)}
-                    </select>
-                  </div>
-                  {/* Coverage For */}
-                  <div className="flex flex-col gap-[6px]">
-                    <label htmlFor="coverageFor" className="text-[11px] font-bold uppercase text-text-label">Coverage For</label>
-                    <select required id="coverageFor" name="coverageFor" value={formData.coverageFor} onChange={handleChange} className="w-full p-[10px] rounded-[6px] border border-border-input bg-bg-input text-[14px] focus:ring-1 focus:ring-primary focus:border-primary transition-colors outline-none">
-                      <option value="Self">Self</option>
-                      <option value="Spouse">Spouse</option>
-                      <option value="Both">Both (Self & Spouse)</option>
-                    </select>
+                    <label htmlFor="zipCode" className="text-[11px] font-bold uppercase text-text-label">Zip Code</label>
+                    <input required type="text" id="zipCode" name="zipCode" value={formData.zipCode} onChange={handleChange} maxLength={5} className="w-full p-[10px] rounded-[6px] border border-border-input bg-bg-input text-[14px] focus:ring-1 focus:ring-primary focus:border-primary transition-colors outline-none" placeholder="12345" />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Gender */}
+                  {/* Household Size */}
                   <div className="flex flex-col gap-[6px]">
-                    <label htmlFor="gender" className="text-[11px] font-bold uppercase text-text-label">Gender</label>
-                    <select required id="gender" name="gender" value={formData.gender} onChange={handleChange} className="w-full p-[10px] rounded-[6px] border border-border-input bg-bg-input text-[14px] focus:ring-1 focus:ring-primary focus:border-primary transition-colors outline-none">
-                      <option value="" disabled>Select Gender</option>
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
+                    <label htmlFor="householdSize" className="text-[11px] font-bold uppercase text-text-label">Household Size</label>
+                    <select required id="householdSize" name="householdSize" value={formData.householdSize} onChange={handleChange} className="w-full p-[10px] rounded-[6px] border border-border-input bg-bg-input text-[14px] focus:ring-1 focus:ring-primary focus:border-primary transition-colors outline-none">
+                      <option value="1">1 Person</option>
+                      <option value="2">2 People</option>
+                      <option value="3">3 People</option>
+                      <option value="4">4 People</option>
+                      <option value="5+">5+ People</option>
                     </select>
                   </div>
-                  {/* Tobacco Use */}
+                  {/* Expected Income */}
                   <div className="flex flex-col gap-[6px]">
-                    <label htmlFor="tobaccoUse" className="text-[11px] font-bold uppercase text-text-label">Tobacco Use (Last 12 months)</label>
-                    <select required id="tobaccoUse" name="tobaccoUse" value={formData.tobaccoUse} onChange={handleChange} className="w-full p-[10px] rounded-[6px] border border-border-input bg-bg-input text-[14px] focus:ring-1 focus:ring-primary focus:border-primary transition-colors outline-none">
-                      <option value="No">No</option>
-                      <option value="Yes">Yes</option>
+                    <label htmlFor="income" className="text-[11px] font-bold uppercase text-text-label">Expected Annual Income</label>
+                    <select required id="income" name="income" value={formData.income} onChange={handleChange} className="w-full p-[10px] rounded-[6px] border border-border-input bg-bg-input text-[14px] focus:ring-1 focus:ring-primary focus:border-primary transition-colors outline-none">
+                      <option value="" disabled>Select Income Range</option>
+                      <option value="Under $20k">Under $20,000</option>
+                      <option value="$20k - $30k">$20,000 - $30,000</option>
+                      <option value="$30k - $40k">$30,000 - $40,000</option>
+                      <option value="$40k - $50k">$40,000 - $50,000</option>
+                      <option value="Over $50k">Over $50,000</option>
                     </select>
                   </div>
                 </div>
@@ -299,7 +296,7 @@ export default function App() {
                 </section>
                 <section>
                   <h3 className="font-semibold text-primary text-base mb-2">3. Data Collection and Usage</h3>
-                  <p>We collect personal information such as your name, phone number, date of birth, state of residence, and basic health descriptors (like tobacco use) solely for the purpose of connecting you with appropriate insurance partners. We may use digital tracking technologies (such as cookies) to monitor website performance and improve our services.</p>
+                  <p>We collect personal information such as your name, phone number, email address, zip code, date of birth, and basic health and eligibility information solely for the purpose of connecting you with appropriate insurance partners. We may use digital tracking technologies (such as cookies) to monitor website performance and improve our services.</p>
                 </section>
                 <section>
                   <h3 className="font-semibold text-primary text-base mb-2">4. Sharing Your Information</h3>
